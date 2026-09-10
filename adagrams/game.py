@@ -86,11 +86,39 @@ def score_word(word):
         score += letter_value
 
     # If the word contains between 7-10 letters, add 8 to score
-    if len(word) in range(7, 10):
+    if len(word) in range(7, 11):
         score += 8
 
     return score
 
 
 def get_highest_word_score(word_list):
-    pass
+    '''
+    params:
+        word_list(list) - a list of Adagram words
+    returns:
+        winner(tuple) - the winning word data including score
+    '''
+    scorekeeper = []
+
+    #Iterate through word_list, use score_word function to find scores
+    for word in word_list:
+        score = score_word(word)
+        scorekeeper.append([word, score])
+
+    current_highest = 0
+
+    for high_score in scorekeeper:
+        if high_score[1] > current_highest:
+            current_highest = high_score[1]
+            winning_word = high_score[0]
+        elif high_score[1] == current_highest and high_score[1] != 0:
+            # If one word is shorter, it wins the tiebreaker
+            if len(high_score[0]) == 10 or len(high_score[0]) < len(winning_word):
+                current_highest = high_score[1]
+                winning_word = high_score[0]
+        
+    winner = (winning_word, current_highest,)
+
+    return winner
+        
