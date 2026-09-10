@@ -3,8 +3,9 @@ from random import randint
 def draw_letters():
     '''
     Params: none
-    Returns: an array of 10 strings containing
-    exactly 1 letter each
+    Returns: 
+        player_letters: an array of 10 strings containing
+        exactly 1 letter each
     '''
 
     letter_dict = {
