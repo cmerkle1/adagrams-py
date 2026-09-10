@@ -6,6 +6,8 @@ def draw_letters():
     Returns: 
         player_letters: an array of 10 strings containing
         exactly 1 letter each
+    This function 'draws' letters for the player from a letter_dict and 
+    establishes the hand for the Adagrams game.
     '''
 
     letter_dict = {
@@ -16,7 +18,7 @@ def draw_letters():
     
     letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-    # draw letters from letter_dict using random, using dict index to draw while available
+    # Draw letters from letter_dict using random, using dict index to draw while available
     player_letters = []
     max_letters = 10
 
@@ -45,6 +47,8 @@ def uses_available_letters(word, letter_bank):
         boolean
         True if every letter in word is available in letter_bank
         Else False
+    This function determines if there are available letters 
+    to create a word.
     '''
     # Create a new list copy to avoid mutable object issues
     copy_bank = []
@@ -69,6 +73,8 @@ def score_word(word):
         word(str) - the Adagrams word to score
     returns:
         score(int) - number of points scored
+    This function calculates a word score for a given word
+    based on values in a score_dict.
     '''
     score = 0
 
@@ -98,6 +104,11 @@ def get_highest_word_score(word_list):
         word_list(list) - a list of Adagram words
     returns:
         winner(tuple) - the winning word data including score
+    This function finds the highest scoring word from a word_list
+    using the criteria: highest score wins, then ties break down to
+    winner if one word has a length of 10 and the other doesn't, winner 
+    if one word is shorter (shorter wins), then breaks down further if 
+    a 10 length tie occurs by the item with the earliest entry in the original list.
     '''
     scorekeeper = []
 
@@ -107,18 +118,24 @@ def get_highest_word_score(word_list):
         scorekeeper.append([word, score])
 
     current_highest = 0
+    winning_word = ''
 
+    # Implement logic for determining winner
     for high_score in scorekeeper:
-        if high_score[1] > current_highest:
+        if high_score[1] > current_highest: # Checks basic score logic
             current_highest = high_score[1]
             winning_word = high_score[0]
-        elif high_score[1] == current_highest and high_score[1] != 0:
-            # If one word is shorter, it wins the tiebreaker
-            if len(high_score[0]) == 10 or len(high_score[0]) < len(winning_word):
+    
+        elif high_score[1] == current_highest and high_score[1] != 0: # Checks tied scores
+            if len(high_score[0]) == 10 and len(winning_word) != 10: # If one has len 10, that wins
+                current_highest = high_score[1]
+                winning_word = high_score[0]    
+
+            if len(high_score[0]) < len(winning_word) and len(winning_word) != 10:
                 current_highest = high_score[1]
                 winning_word = high_score[0]
         
-    winner = (winning_word, current_highest,)
+    winner = (winning_word, current_highest,) # Returned as a tuple
 
     return winner
         
