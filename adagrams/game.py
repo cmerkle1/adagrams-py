@@ -15,8 +15,13 @@ def draw_letters():
         'J': 1, 'K': 1, 'L': 4, 'M': 2, 'N': 6, 'O': 8, 'P': 2, 'Q': 1, 'R': 6, 
         'S': 4, 'T': 6, 'U': 4, 'V': 2, 'W': 2, 'X': 1, 'Y': 2, 'Z': 1
         }
-    
-    letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+    # ----- Additional code to account for letter weighting -----
+    letter_pool = []
+
+    for letter, quantity in letter_dict.items():
+        for i in range(quantity):
+            letter_pool.append(letter)
 
     # Draw letters from letter_dict using random, using dict index to draw while available
     player_letters = []
@@ -24,16 +29,11 @@ def draw_letters():
 
     # While letters < 10, draw letters from letter_dict
     while len(player_letters) < max_letters:
-        random_index = randint(0, 25)
-        letter = letters[random_index]
-
-        # If less than 1 quantity remains, redraw
-        while letter_dict[letter] < 1:
-            random_index = randint(0, 25)
-            letter = letters[random_index]
+        random_index = randint(0, len(letter_pool) - 1) 
+        letter = letter_pool[random_index]
 
         player_letters.append(letter)
-        letter_dict[letter] -= 1
+        letter_pool.pop(random_index)
 
     return player_letters
 
