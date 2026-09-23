@@ -1,5 +1,9 @@
 from random import randint
 
+# Global Variables
+MAX_LETTERS = 10
+EXTRA_POINTS = 8
+
 def draw_letters():
     '''
     Params: none
@@ -25,10 +29,9 @@ def draw_letters():
 
     # Draw letters from letter_dict using random, using dict index to draw while available
     player_letters = []
-    max_letters = 10
 
     # While letters < 10, draw letters from letter_dict
-    while len(player_letters) < max_letters:
+    while len(player_letters) < MAX_LETTERS:
         random_index = randint(0, len(letter_pool) - 1) 
         letter = letter_pool[random_index]
 
@@ -93,7 +96,7 @@ def score_word(word):
 
     # If the word contains between 7-10 letters, add 8 to score
     if len(word) in range(7, 11):
-        score += 8
+        score += EXTRA_POINTS
 
     return score
 
@@ -110,30 +113,25 @@ def get_highest_word_score(word_list):
     if one word is shorter (shorter wins), then breaks down further if 
     a 10 length tie occurs by the item with the earliest entry in the original list.
     '''
-    scorekeeper = []
-
-    #Iterate through word_list, use score_word function to find scores
-    for word in word_list:
-        score = score_word(word)
-        scorekeeper.append([word, score])
-
     current_highest = 0
     winning_word = ''
 
     # Implement logic for determining winner
-    for high_score in scorekeeper:
-        if high_score[1] > current_highest: # Checks basic score logic
-            current_highest = high_score[1]
-            winning_word = high_score[0]
-    
-        elif high_score[1] == current_highest and high_score[1] != 0: # Checks tied scores
-            if len(high_score[0]) == 10 and len(winning_word) != 10: # If one has len 10, that wins
-                current_highest = high_score[1]
-                winning_word = high_score[0]    
+    for word in word_list:
+        score = score_word(word)
 
-            if len(high_score[0]) < len(winning_word) and len(winning_word) != 10:
-                current_highest = high_score[1]
-                winning_word = high_score[0]
+        if score > current_highest:
+            current_highest = score
+            winning_word = word
+    
+        elif score == current_highest and score != 0: # Checks tied scores
+            if len(word) == 10 and len(winning_word) != 10: # If one has len 10, that wins
+                current_highest = score
+                winning_word = word  
+
+            if len(word) < len(winning_word) and len(winning_word) != 10:
+                current_highest = score
+                winning_word = word
         
     winner = (winning_word, current_highest,) # Returned as a tuple
 
